@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "staxter-currency"
+    }
+  },
+  "defaultProject": "staxter-currency",
+  "cli": {
+    "analytics": "7081bef3-f517-4218-a13c-0fcd69d1b8ea"
+  }
 }
