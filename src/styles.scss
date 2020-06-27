@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+html {
+  background: #f5f3f3;
+}
+
+body {
+  font-family: system, -apple-system, ".SFNSDisplay-Regular", HelveticaNeue, Arial;
+  margin: 0;
+  width: 100%;
+  padding: 0 20px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
