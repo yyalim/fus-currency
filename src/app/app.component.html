@@ -1,1 +1,11 @@
-<router-outlet></router-outlet>
+<nav class="main-navigation">
+  <ul class="navigation-links">
+    <li><a routerLink="currency/latest" routerLinkActive="active">Latest Rates</a></li>
+    <li><a routerLink="currency/last-month" routerLinkActive="active">Last 30 Days</a></li>
+    <li><a routerLink="currency/top-five" routerLinkActive="active">Top Five</a></li>
+  </ul>
+</nav>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
