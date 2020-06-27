@@ -1,1 +1,24 @@
-<p>latest works!</p>
+<p-table [value]="latestRates">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Currency</th>
+            <th>Spot</th>
+            <th width="200px" class="inc-dec-header">Increase / Decrease</th>
+            <th width="100px" class="chart-header">Chart</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-latestRate>
+        <tr>
+            <td>{{ latestRate.symbol }}</td>
+            <td>{{ latestRate.currentRate }}</td>
+            <td>
+              <i *ngIf="latestRate.diff > 0" class="pi pi-chevron-up green"></i>
+              <i *ngIf="latestRate.diff < 0" class="pi pi-chevron-down red"></i>
+              <i *ngIf="latestRate.diff == 0" class="pi pi-minus yellow"></i>
+            </td>
+            <td>
+              <i class="pi pi-chart-bar"></i>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

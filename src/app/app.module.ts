@@ -1,22 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LatestComponent } from './latest/latest.component';
 import { LastMonthComponent } from './last-month/last-month.component';
 import { TopFiveComponent } from './top-five/top-five.component';
+
+import { AppRoutingModule } from './app-routing.module';
+import { LatestMoudule } from './latest/latest.module';
+
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LatestComponent,
     LastMonthComponent,
     TopFiveComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CoreModule,
+    LatestMoudule
   ],
   providers: [],
   bootstrap: [AppComponent]
