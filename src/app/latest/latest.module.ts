@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { TableModule } from 'primeng/table';
 import { LatestComponent } from './latest.component';
+import { SharedModule } from  '../shared/shared.module'
 
 @NgModule({
   declarations: [
@@ -9,7 +11,9 @@ import { LatestComponent } from './latest.component';
   ],
   imports: [
     TableModule,
-    CommonModule
+    CommonModule,
+    RouterModule,
+    SharedModule
   ],
   exports: [
     LatestComponent

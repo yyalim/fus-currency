@@ -6,11 +6,11 @@ import { LastMonthComponent } from './last-month/last-month.component';
 import { TopFiveComponent } from './top-five/top-five.component';
 
 const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: '/currency/latest' },
-  { path: 'currency/latest', component: LatestComponent },
-  { path: 'currency/last-month', component: LastMonthComponent },
-  { path: 'currency/top-five', component: TopFiveComponent },
-  { path: '**', pathMatch: 'full', redirectTo: '/currency/latest' }
+  { path: '', pathMatch: 'full', redirectTo: 'currency/latest/EUR' },
+  { path: 'currency/latest/:base', component: LatestComponent },
+  { path: 'currency/last-month/:base', component: LastMonthComponent },
+  { path: 'currency/top-five/:base', component: TopFiveComponent },
+  { path: '**', pathMatch: 'full', redirectTo: '/currency/latest/eur' }
 ];
 
 @NgModule({

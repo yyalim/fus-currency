@@ -1,3 +1,4 @@
+<app-select-currency [availableRates]="availableRates" (onCurrencyChange)="handleCurrencyChange($event)"></app-select-currency>
 <p-table [value]="latestRates">
     <ng-template pTemplate="header">
         <tr>
@@ -17,7 +18,9 @@
               <i *ngIf="latestRate.diff == 0" class="pi pi-minus yellow"></i>
             </td>
             <td>
-              <i class="pi pi-chart-bar"></i>
+              <a routerLink="/currency/last-month/{{baseCurrency}}/{{latestRate.symbol}}">
+                <i class="pi pi-chart-bar"></i>
+              </a>
             </td>
         </tr>
     </ng-template>

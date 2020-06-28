@@ -11,3 +11,8 @@ export interface ILatestRates {
   diff: number;
   diffPercentage: number;
 }
+
+export interface IAvailableRate {
+  label: string,
+  value: string
+}

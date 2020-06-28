@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
+import uniqBy from 'lodash/uniqBy';
+
 import { DateService } from './date.service';
+import { SortingService } from './sorting.service';
 
 import { IDailyRatesResponse, ILatestRates } from '../shared/interfaces';
 
@@ -14,26 +17,27 @@ import { IDailyRatesResponse, ILatestRates } from '../shared/interfaces';
 export class RatesService {
   private baseURL = 'https://api.exchangeratesapi.io'
 
-  // default currency is EURO
-  private base:string = 'EUR'
+  private _baseCurrency$ = new BehaviorSubject('EUR');
+  private _baseCurrency  = 'EUR'
 
   constructor(
     private http: HttpClient,
-    private dateService: DateService
+    private dateService: DateService,
+    private sortingService: SortingService
   ) { }
 
-  private getCurrentRates(): Observable<IDailyRatesResponse> {
-    return this.http.get<IDailyRatesResponse>(this.baseURL + `/latest?base=${this.base}`)
-      .pipe(catchError(this.handleError));
+  public getBaseCurrency(): Observable<string> {
+    return this._baseCurrency$;
   }
 
-  private getPreviousRates(): Observable<IDailyRatesResponse>{
-    return this.http.get<IDailyRatesResponse>(this.baseURL + `/${this.dateService.getLastWeekDay()}`)
-      .pipe(catchError(this.handleError));
+  public setBaseCurrency(value: string) {
+    this._baseCurrency$.next(value.toUpperCase());
+    this._baseCurrency = value.toUpperCase();
   }
+
 
   getCurrentAndPreviousRates() {
-    return forkJoin([this.getCurrentRates(), this.getPreviousRates()]);
+    return forkJoin([this.getCurrentRatesRequest(), this.getPreviousRatesRequest()]);
   }
 
   generateTodaysRate(
@@ -57,11 +61,24 @@ export class RatesService {
       });
     }
 
-    return latestRates;
+    return latestRates.sort(this.sortingService.compareByKey('symbol'));
   }
 
   getAvailableRates(currentRate: IDailyRatesResponse) {
-    return Object.keys(currentRate.rates);
+    return uniqBy([
+      { label: this._baseCurrency, value: this._baseCurrency },
+      ...Object.keys(currentRate.rates).map(rate => ({ label: rate, value: rate}))
+    ].sort(this.sortingService.compareByKey('label')), 'label');
+  }
+
+  private getCurrentRatesRequest(): Observable<IDailyRatesResponse> {
+    return this.http.get<IDailyRatesResponse>(this.baseURL + `/latest?base=${this._baseCurrency}`)
+      .pipe(catchError(this.handleError));
+  }
+
+  private getPreviousRatesRequest(): Observable<IDailyRatesResponse>{
+    return this.http.get<IDailyRatesResponse>(this.baseURL + `/${this.dateService.getLastWeekDay()}?base=${this._baseCurrency}`)
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: any) {
