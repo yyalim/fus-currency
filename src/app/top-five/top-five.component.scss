@@ -1,0 +1,13 @@
+.order-button {
+  margin: 0 5px;
+}
+
+.bold {
+  font-weight: 900;
+}
+
+@media screen and (min-width: 600px) {
+  .top-five--actions {
+    justify-content: space-between;
+  }
+}

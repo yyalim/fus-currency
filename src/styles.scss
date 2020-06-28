@@ -36,3 +36,26 @@ th, td {
 .label {
   margin: 0 10px;
 }
+
+.select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.buttons {
+  margin: 10px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (min-width: 600px) {
+  .actions {
+    display: flex;
+  }
+
+  .select {
+    justify-content: start;
+  }
+}

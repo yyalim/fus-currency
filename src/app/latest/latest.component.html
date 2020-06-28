@@ -1,5 +1,8 @@
 <div class="actions">
-  <span class="label">Base:</span><app-select-currency [availableRates]="availableRates" currencyPosition="base" (onCurrencyChange)="handleCurrencyChange($event)"></app-select-currency>
+  <div class="select">
+    <span class="label">Base:</span>
+    <app-select-currency [availableRates]="availableRates" currencyPosition="base" (onCurrencyChange)="handleCurrencyChange($event)"></app-select-currency>
+  </div>
 </div>
 <p-table [value]="latestRates" [responsive]="true">
     <ng-template pTemplate="header">

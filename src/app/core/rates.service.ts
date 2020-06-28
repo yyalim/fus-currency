@@ -5,6 +5,7 @@ import { Observable, forkJoin, BehaviorSubject } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import uniqBy from 'lodash/uniqBy';
+import { Decimal } from 'decimal.js';
 
 import { DateService } from './date.service';
 import { SortingService } from './sorting.service';
@@ -62,17 +63,17 @@ export class RatesService {
     const latestRates: ILatestRates[] = [];
 
     for(const currency in currentRates.rates) {
-      const currentRate = currentRates.rates[currency];
-      const oldRate = previousRates.rates[currency];
-      const diff = currentRate - oldRate;
-      const diffPercentage = diff / oldRate * 100
+      const currentRate = new Decimal(currentRates.rates[currency]);
+      const oldRate = new Decimal(previousRates.rates[currency]);
+      const diff = currentRate.minus(oldRate);
+      const diffPercentage = diff.dividedBy(oldRate).times(100);
 
       latestRates.push({
         symbol: currency,
-        currentRate,
-        oldRate,
-        diff,
-        diffPercentage
+        currentRate: currentRate.toNumber(),
+        oldRate: oldRate.toNumber(),
+        diff: diff.toNumber(),
+        diffPercentage: diffPercentage.toNumber()
       });
     }
 

@@ -1,7 +1,11 @@
 <div class="actions">
-  <span class="label">Base:</span>
-  <app-select-currency [availableRates]="availableRates" currencyPosition="base" (onCurrencyChange)="handleBaseCurrencyChange($event)"></app-select-currency>
-  <span class="label">Exchange:</span>
-  <app-select-currency [availableRates]="availableRates" currencyPosition="exchange" (onCurrencyChange)="handleExchangeCurrencyChange($event)"></app-select-currency>
+  <div class="select">
+    <span class="label">Base:</span>
+    <app-select-currency [availableRates]="availableRates" currencyPosition="base" (onCurrencyChange)="handleBaseCurrencyChange($event)"></app-select-currency>
+  </div>
+  <div class="select">
+    <span class="label">Exchange:</span>
+    <app-select-currency [availableRates]="availableRates" currencyPosition="exchange" (onCurrencyChange)="handleExchangeCurrencyChange($event)"></app-select-currency>
+  </div>
 </div>
 <p-chart type="line" [data]="data" [options]="options"></p-chart>
