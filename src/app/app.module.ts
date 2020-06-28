@@ -9,11 +9,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { LatestMoudule } from './latest/latest.module';
+import { LastMonthModule } from './last-month/last-month.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LastMonthComponent,
     TopFiveComponent
   ],
   imports: [
@@ -21,6 +21,7 @@ import { LatestMoudule } from './latest/latest.module';
     AppRoutingModule,
     CoreModule,
     SharedModule,
+    LastMonthModule,
     LatestMoudule
   ],
   providers: [],
