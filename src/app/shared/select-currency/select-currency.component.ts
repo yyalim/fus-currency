@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { IAvailableRate } from '../interfaces';
 import { RatesService } from '../../core/rates.service';
 
@@ -9,30 +8,37 @@ import { RatesService } from '../../core/rates.service';
   styleUrls: ['./select-currency.component.scss']
 })
 export class SelectCurrencyComponent implements OnInit {
-  public baseCurrency;
+  public currency;
 
   @Input()
   public availableRates: IAvailableRate[] = [];
+
+  @Input()
+  public currencyPosition: 'base' | 'exchange';
 
   @Output()
   onCurrencyChange: EventEmitter<string> = new EventEmitter();
 
   constructor(
-    private ratesService: RatesService,
-    private route: ActivatedRoute
+    private ratesService: RatesService
   ) { }
 
   ngOnInit(): void {
-    this.ratesService.getBaseCurrency().subscribe(value => this.baseCurrency = value)
 
-    this.route.paramMap.subscribe(params => {
-      this.ratesService.setBaseCurrency(params.get('base'));
-    });
+    if(this.currencyPosition === 'base') {
+      this.ratesService.getBaseCurrency().subscribe(value => this.currency = value);
+    } else {
+      this.ratesService.getExchangeCurrency().subscribe(value => this.currency = value);
+    }
   }
 
   onChange(event) {
-    const selectedCurrency = event.value;
-    this.ratesService.setBaseCurrency(event.value);
+    if(this.currencyPosition === 'base') {
+      this.ratesService.setBaseCurrency(event.value);
+    } else {
+      this.ratesService.setExchangeCurrency(event.value);
+    }
+
     this.onCurrencyChange.emit(event.value);
   }
 }

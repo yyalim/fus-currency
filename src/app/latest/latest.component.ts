@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RatesService } from '../core/rates.service';
 
 import { ILatestRates, IAvailableRate } from '../shared/interfaces';
@@ -17,11 +17,16 @@ export class LatestComponent implements OnInit {
   constructor(
     private ratesService: RatesService,
     private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.fetchData();
+    this.route.paramMap.subscribe(params => {
+      this.ratesService.setBaseCurrency(params.get('base'));
+    });
+
     this.ratesService.getBaseCurrency().subscribe(value => this.baseCurrency = value);
+    this.fetchData();
   }
 
   fetchData() {

@@ -8,7 +8,7 @@ import { TopFiveComponent } from './top-five/top-five.component';
 const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'currency/latest/EUR' },
   { path: 'currency/latest/:base', component: LatestComponent },
-  { path: 'currency/last-month/:base', component: LastMonthComponent },
+  { path: 'currency/last-month/:base/:exchange', component: LastMonthComponent },
   { path: 'currency/top-five/:base', component: TopFiveComponent },
   { path: '**', pathMatch: 'full', redirectTo: '/currency/latest/eur' }
 ];

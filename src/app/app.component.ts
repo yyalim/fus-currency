@@ -8,6 +8,7 @@ import { RatesService } from './core/rates.service'
 })
 export class AppComponent implements OnInit {
   public baseCurrency: string;
+  public exchangeCurrency: string;
 
   constructor(
     private ratesService: RatesService
@@ -15,5 +16,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.ratesService.getBaseCurrency().subscribe(value => this.baseCurrency = value);
+    this.ratesService.getExchangeCurrency().subscribe(value => this.exchangeCurrency = value);
   }
 }

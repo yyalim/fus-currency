@@ -8,7 +8,6 @@ const DATE_FORMAT = 'YYYY-MM-DD';
   providedIn: 'root'
 })
 export class DateService {
-
   constructor() { }
 
   getLastWeekDay() {
@@ -27,5 +26,13 @@ export class DateService {
       default:
         return now.subtract(1, 'day').format(DATE_FORMAT);
     }
+  }
+
+  getToday() {
+    return moment().format(DATE_FORMAT);
+  }
+
+  getLastMonthDate() {
+    return moment().subtract(30, 'day').format(DATE_FORMAT);
   }
 }

@@ -4,6 +4,13 @@ export interface IDailyRatesResponse {
   date: string
 }
 
+export interface IMonthlyRatesResponse {
+  rates: { [key: string]: { [key: string]: number }},
+  base: string,
+  start_at: string,
+  end_at: string
+}
+
 export interface ILatestRates {
   symbol: string;
   currentRate: number;
