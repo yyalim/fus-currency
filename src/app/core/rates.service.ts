@@ -48,8 +48,8 @@ export class RatesService {
     this._exchangeCurrency = value.toUpperCase();
   }
 
-  getCurrentAndPreviousRates() {
-    return forkJoin([this.getCurrentRatesRequest(), this.getPreviousRatesRequest()]);
+  getCurrentAndPreviousRates(lastRateDay) {
+    return forkJoin([this.getCurrentRatesRequest(), this.getPreviousRatesRequest(lastRateDay)]);
   }
 
   getCurrenctAndMonthlyRates() {
@@ -100,14 +100,21 @@ export class RatesService {
     ].sort(this.sortingService.compareByKey('label')), 'label');
   }
 
+  isRatesChanged(latestRates: ILatestRates[]) {
+    const diffs = latestRates.map(latestRates => latestRates.diff)
+    const sum = diffs.reduce((acc, cur) => { return acc + cur }, 0)
+
+    return sum !== 0;
+  }
+
   // Requests
   private getCurrentRatesRequest(): Observable<IDailyRatesResponse> {
     return this.http.get<IDailyRatesResponse>(this.baseURL + `/latest?base=${this._baseCurrency}`)
       .pipe(catchError(this.handleError));
   }
 
-  private getPreviousRatesRequest(): Observable<IDailyRatesResponse>{
-    return this.http.get<IDailyRatesResponse>(this.baseURL + `/${this.dateService.getLastWeekDay()}?base=${this._baseCurrency}`)
+  private getPreviousRatesRequest(lastRateDay): Observable<IDailyRatesResponse>{
+    return this.http.get<IDailyRatesResponse>(this.baseURL + `/${lastRateDay}?base=${this._baseCurrency}`)
       .pipe(catchError(this.handleError));
   }
 

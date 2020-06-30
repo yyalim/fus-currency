@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RatesService } from '../core/rates.service';
 
 import { ILatestRates, IAvailableRate } from '../shared/interfaces';
+import { DateService } from '../core/date.service';
 
 @Component({
   selector: 'app-latest',
@@ -17,7 +18,8 @@ export class LatestComponent implements OnInit {
   constructor(
     private ratesService: RatesService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dateService: DateService
   ) { }
 
   ngOnInit(): void {
@@ -26,18 +28,25 @@ export class LatestComponent implements OnInit {
     });
 
     this.ratesService.getBaseCurrency().subscribe(value => this.baseCurrency = value);
-    this.fetchData();
+    this.fetchData(this.dateService.getLastWeekDay());
   }
 
-  fetchData() {
-    this.ratesService.getCurrentAndPreviousRates().subscribe(([currentRates, previousRates]) => {
-      this.latestRates = this.ratesService.generateTodaysRate(currentRates, previousRates);
-      this.availableRates = this.ratesService.getAvailableRates(currentRates)
-    })
-  }
 
   handleCurrencyChange(selectedCurrency: string) {
     this.router.navigateByUrl(`/currency/latest/${selectedCurrency}`);
-    this.fetchData();
+    this.fetchData(this.dateService.getLastWeekDay());
+  }
+
+  private fetchData(lastRateDay: string) {
+    this.ratesService.getCurrentAndPreviousRates(lastRateDay).subscribe(([currentRates, previousRates]) => {
+      const latestRates = this.ratesService.generateTodaysRate(currentRates, previousRates);
+      this.availableRates = this.ratesService.getAvailableRates(currentRates)
+
+      if(this.ratesService.isRatesChanged(latestRates)){
+        this.latestRates = latestRates;
+      } else {
+        this.fetchData(this.dateService.getLastWeekDay(lastRateDay))
+      }
+    })
   }
 }

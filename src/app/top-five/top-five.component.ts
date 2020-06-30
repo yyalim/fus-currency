@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import every from 'lodash/every' ;
+
 import { RatesService } from '../core/rates.service';
 import { SortingService } from '../core/sorting.service';
+import { DateService } from '../core/date.service';
 
 import { ILatestRates, IAvailableRate } from '../shared/interfaces';
 
@@ -21,7 +24,8 @@ export class TopFiveComponent implements OnInit {
     private ratesService: RatesService,
     private sortingService: SortingService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dateService: DateService
   ) { }
 
   ngOnInit(): void {
@@ -30,15 +34,15 @@ export class TopFiveComponent implements OnInit {
     });
 
     this.ratesService.getBaseCurrency().subscribe(value => this.baseCurrency = value);
-    this.fetchData();
+    this.fetchData(this.dateService.getLastWeekDay());
   }
 
   handleCurrencyChange(selectedCurrency: string) {
     this.router.navigateByUrl(`/currency/top-five/${selectedCurrency}`);
-    this.fetchData();
+    this.fetchData(this.dateService.getLastWeekDay());
   }
 
-  setOrderAsc() {
+    setOrderAsc() {
     this.order = 'asc';
     this.setTopFive();
   }
@@ -48,12 +52,17 @@ export class TopFiveComponent implements OnInit {
     this.setTopFive();
   }
 
-  private fetchData() {
-    this.ratesService.getCurrentAndPreviousRates().subscribe(([currentRates, previousRates]) => {
-      this.latestRates = this.ratesService.generateTodaysRate(currentRates, previousRates);
+  private fetchData(lastRateDay: string) {
+    this.ratesService.getCurrentAndPreviousRates(lastRateDay).subscribe(([currentRates, previousRates]) => {
+      const latestRates = this.ratesService.generateTodaysRate(currentRates, previousRates);
       this.availableRates = this.ratesService.getAvailableRates(currentRates);
 
-      this.setTopFive()
+      if(this.ratesService.isRatesChanged(latestRates)){
+        this.latestRates = latestRates;
+        this.setTopFive()
+      } else {
+        this.fetchData(this.dateService.getLastWeekDay(lastRateDay))
+      }
     })
   }
 

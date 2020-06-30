@@ -10,11 +10,17 @@ const DATE_FORMAT = 'YYYY-MM-DD';
 export class DateService {
   constructor() { }
 
-  getLastWeekDay() {
+  getLastWeekDay(date?: string) {
     // returns date of last thursday if today is weekend
     // returns date of last friday if today is monday
     // returns date of the day before on other days
-    const now = moment()
+    let now;
+
+    if(date !== undefined) {
+      now = moment(date, DATE_FORMAT);
+    } else {
+      now = moment();
+    }
 
     switch(now.day()) {
       case 0: // it's sunday
